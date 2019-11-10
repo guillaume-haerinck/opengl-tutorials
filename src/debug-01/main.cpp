@@ -30,9 +30,14 @@ int main(int argc, char *argv[]) {
     {
         glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);
-        glEnableVertexAttribArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
+        // Vertex input description
+        {
+            glEnableVertexAttribArray(0);
+            glBindBuffer(GL_ARRAY_BUFFER, vbo);
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
+        }
+
         glBindVertexArray(0);
     }
 
