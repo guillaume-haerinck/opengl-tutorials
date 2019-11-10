@@ -10,7 +10,15 @@ public:
     App();
     ~App();
 
+    /**
+     * @brief Prepare for a new frame
+     * @note Must be called after handling SDL events
+     */
     void beginFrame() const;
+
+    /**
+     * @brief Render the preparred frame
+     */
     void endFrame() const;
 
     bool isRunning() const;

@@ -25,6 +25,8 @@ App::~App() {
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
+
+	SDL_GL_DeleteContext(m_glContext);
     SDL_DestroyWindow(m_window);
 	SDL_Quit();
 }
@@ -65,14 +67,17 @@ void App::initSDL() {
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+
+	// Various attributes
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);	
 	
 	m_window = SDL_CreateWindow(
 		"OpenGL Playground",
-		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 		500, 500,
-		SDL_WINDOW_OPENGL
+		SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI
     );
 	if (m_window == nullptr) {
         spdlog::critical("[SDL2] Window is null: {}", SDL_GetError());
@@ -97,7 +102,7 @@ void App::initSDL() {
 void App::initImgui() const {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
+	ImGui::StyleColorsDark();
     ImGui_ImplSDL2_InitForOpenGL(m_window, m_glContext);
 	ImGui_ImplOpenGL3_Init("#version 330 core");
-	ImGui::StyleColorsDark();
 }
