@@ -2,6 +2,8 @@
 
 Through these exercices, you will improve your skills to catch OpenGL errors. You will understand how to detect and prevent them.
 
+___
+
 ## 01 - Call me maybe
 
 > Learn to get OpenGL errors when calling functions
@@ -69,6 +71,8 @@ There were 2 mistakes to find :
 
 If, even with the correction, you can't make it, go check `cheat/debug-01/main.cpp`.
 
+___
+
 ## 02 - 50 shades of errors
 
 > Learn to get OpenGL shader building errors
@@ -87,6 +91,10 @@ You can ask OpenGL if the shader compilation succeeded, and if not, you can get 
 #include <spdlog/spdlog.h>
 #include <debug_break/debug_break.h>
 
+unsigned int vs = glCreateShader(GL_VERTEX_SHADER);
+
+(...)
+
 // Check compilation
 int success;
 glGetShaderiv(vs, GL_COMPILE_STATUS, &success);
@@ -94,7 +102,7 @@ glGetShaderiv(vs, GL_COMPILE_STATUS, &success);
 if (!success) {
     char infoLog[512];
     glGetShaderInfoLog(vs, 512, NULL, infoLog);
-    spdlog::critical("[Shader] Compilation failed : {}", infoLog);
+    spdlog::critical("[VertexShader] Compilation failed : {}", infoLog);
     debug_break();
 }
 ```
@@ -119,16 +127,90 @@ There were 3 errors to fix :
 
 If, even with the correction, you can't make it, go check `cheat/debug-02/main.cpp`.
 
+___
+
 ## 03 - Buffers everywhere
 
 > Learn to use RenderDoc to Debug OpenGL buffers
 
+### 🤔 The problem
 
+
+
+### 🧐 What is available ?
+
+
+
+### 👌 The concrete solution
+
+
+### 💪 The exercice
+
+Modify the `CMakeLists.txt` at the line 12 with `file(GLOB_RECURSE MY_SOURCES src/debug-03/*)` and open the `debug-03/main.cpp`.
+
+
+<details><summary>Correction</summary>
+
+There were X errors to fix :
+
+</details>
+
+If, even with the correction, you can't make it, go check `cheat/debug-03/main.cpp`.
+
+___
 
 ## 04 - Uniforms in shape
 
 > Updates uniforms in a safer way
 
+### 🤔 The problem
+
+
+
+### 🧐 What is available ?
+
+
+
+### 👌 The concrete solution
+
+
+### 💪 The exercice
+
+Modify the `CMakeLists.txt` at the line 12 with `file(GLOB_RECURSE MY_SOURCES src/debug-04/*)` and open the `debug-04/main.cpp`.
+
+
+<details><summary>Correction</summary>
+
+There were X errors to fix :
+
+</details>
+
+If, even with the correction, you can't make it, go check `cheat/debug-04/main.cpp`.
+
+___
+
 ## 05 - Cube, mesh, and the universe
 
 > Display a cube in 3D and use RenderDoc to check for data inconsistensy
+
+### 🤔 The problem
+
+
+### 🧐 What is available ?
+
+
+### 👌 The concrete solution
+
+
+### 💪 The exercice
+
+Modify the `CMakeLists.txt` at the line 12 with `file(GLOB_RECURSE MY_SOURCES src/debug-05/*)` and open the `debug-05/main.cpp`.
+
+
+<details><summary>Correction</summary>
+
+There were X errors to fix :
+
+</details>
+
+If, even with the correction, you can't make it, go check `cheat/debug-05/main.cpp`.
