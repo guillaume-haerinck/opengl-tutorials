@@ -2,6 +2,8 @@
 #include <glad/glad.h>
 #include <spdlog/spdlog.h>
 #include <debug_break/debug_break.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "common/app.h"
 #include "common/gl-exception.h"
@@ -72,11 +74,12 @@ int main(int argc, char *argv[]) {
             layout (location = 0) in vec3 aPos;
             layout (location = 1) in vec3 aColor;
 
+            uniform mat4 uModel;
             out vec3 vColor;
 
             void main() {
                 vColor = aColor;
-                gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+                gl_Position = vec4(aPos, 1.0) * uModel;
             }
         )";
         
@@ -98,7 +101,6 @@ int main(int argc, char *argv[]) {
     {
         const char* fsSource = R"(#version 330 core
             out vec4 FragColor;
-
             in vec3 vColor;
 
             void main() {
@@ -140,8 +142,20 @@ int main(int argc, char *argv[]) {
         GLCall(glDeleteShader(vs));
         GLCall(glDeleteShader(fs));
     }
-    
 
+    // ------------------ Uniforms
+    int modelMatUniform;
+    glm::mat4 modelMat = glm::mat4(1.0f);
+    {
+        GLCall(glUseProgram(pipeline));
+
+        modelMatUniform = glGetUniformLocation(pipeline, "uModel");
+        GLCall(glUniformMatrix4fv(modelMatUniform, 1, GL_FALSE, &modelMat[0][0]));
+
+        GLCall(glUseProgram(0));
+    }
+
+    float counter = 0.0f;
     while (app.isRunning()) {
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
@@ -152,10 +166,17 @@ int main(int argc, char *argv[]) {
             };
         }
 
+        counter += 0.1f;
+        if (counter > 100) {
+            counter = 0;
+        }
+
         app.beginFrame();
 
         // Draw call
         GLCall(glUseProgram(pipeline));
+        modelMat = glm::rotate(glm::mat4(1.0f), counter, glm::vec3(0, 1, 0));
+        GLCall(glUniformMatrix4fv(modelMatUniform, 1, GL_FALSE, &modelMat[0][0]));
         GLCall(glBindVertexArray(vao));
         GLCall(glDrawArrays(GL_TRIANGLES, 0, 3));
 
