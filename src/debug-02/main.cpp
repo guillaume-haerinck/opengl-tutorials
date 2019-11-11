@@ -48,11 +48,12 @@ int main(int argc, char *argv[]) {
     // ------------------ Vertex shader
     unsigned int vs;
     {
-        const char* vsSource = R"(#version 330 core
+        const char* vsSource = R"(
+            #version 330 core
             layout (location = 0) in vec3 aPos;
 
             void main() {
-                gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+                gl_Position = vec4(aPos.x, aPos.y, 1.0)
             }
         )";
         
@@ -64,12 +65,12 @@ int main(int argc, char *argv[]) {
     // ------------------ Fragment shader
     unsigned int fs;
     {
-        const char* fsSource = R"(#version 330 core
+        const char* fsSource = R"(
+            #version 330 core
             out vec4 FragColor;
 
-            void main()
-            {
-                FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+            void main() {
+                fragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
             } 
         )";
         

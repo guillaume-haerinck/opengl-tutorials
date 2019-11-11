@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
             layout (location = 0) in vec3 aPos;
 
             void main() {
-                gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+                gl_Position = vec4(aPos, 1.0);
             }
         )";
         
@@ -77,8 +77,7 @@ int main(int argc, char *argv[]) {
         const char* fsSource = R"(#version 330 core
             out vec4 FragColor;
 
-            void main()
-            {
+            void main() {
                 FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
             } 
         )";
@@ -133,8 +132,8 @@ int main(int argc, char *argv[]) {
         app.beginFrame();
 
         // Draw call
-        GLCall((glUseProgram(pipeline));
-        GLCall((glBindVertexArray(vao));
+        GLCall(glUseProgram(pipeline));
+        GLCall(glBindVertexArray(vao));
         GLCall(glDrawArrays(GL_TRIANGLES, 0, 3));
 
         app.endFrame();

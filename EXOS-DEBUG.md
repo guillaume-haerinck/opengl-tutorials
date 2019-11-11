@@ -18,6 +18,9 @@ This is it !
 
 > Learn to get OpenGL shader building errors
 
+line 57 ;
+line 82 FragColor
+
 ## EX 03 - Buffers everywhere
 
 > Learn to use RenderDoc to Debug OpenGL buffers
