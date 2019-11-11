@@ -135,23 +135,29 @@ ___
 
 ### 🤔 The problem
 
-
+If your vertex buffer is corrupted, OpenGL won't help you much to find why and how.
 
 ### 🧐 What is available ?
 
-
+Graphic debugger are third-party softwares made to catch and analyze calls made to graphic APIs like OpenGL. Equiped with it, you can follow what is happening at each frame with your software. One of the well-known is called [RenderDoc](https://renderdoc.org/). It's free, open-source and we are going to use it to debug our app.
 
 ### 👌 The concrete solution
 
+At the first opening, this software can be a bit scary. Don't worry, you will get used to it by end of this session. You need to launch you app with it, and capture a frame with `f12` to analyze it. Try it with your last build and play around with it a bit.
 
 ### 💪 The exercice
 
-Modify the `CMakeLists.txt` at the line 12 with `file(GLOB_RECURSE MY_SOURCES src/debug-03/*)` and open the `debug-03/main.cpp`.
+Modify the `CMakeLists.txt` at the line 12 with `file(GLOB_RECURSE MY_SOURCES src/debug-03/*)` and open the `debug-03/main.cpp`. Build and launch.
 
+Strange right ? There should be a colored triangle, but nothing is printed on screen and no errors are reported by OpenGL ! There is only one way to know what happens, Open [RenderDoc](https://renderdoc.org/), launch and analyse the buffer data !
+
+Then have a look on the Vertex input description in your source file and try to fix the problem.
 
 <details><summary>Correction</summary>
 
-There were X errors to fix :
+There were 2 errors to fix :
+- line 57: glEnableVertexAttribArray(0) to glEnableVertexAttribArray(1)
+- line 59: glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 1 * sizeof(char), NULL) to glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL)
 
 </details>
 
