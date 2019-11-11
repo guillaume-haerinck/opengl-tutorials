@@ -14,4 +14,18 @@ GenVao 0 line 32
 This is it !
 </details>
 
+## EX 02 - 50 shades of errors
 
+> Learn to get OpenGL shader building errors
+
+## EX 03 - Buffers everywhere
+
+> Learn to use RenderDoc to Debug OpenGL buffers
+
+## EX 04 - Uniforms in shape
+
+> Updates uniforms in a safer way
+
+## EX 05 - Cube, mesh, and the universe
+
+> Display a cube in 3D and use RenderDoc to check for data inconsistensy

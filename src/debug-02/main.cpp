@@ -47,8 +47,6 @@ int main(int argc, char *argv[]) {
 
     // ------------------ Vertex shader
     unsigned int vs;
-    int success;
-    char infoLog[512];
     {
         const char* vsSource = R"(#version 330 core
             layout (location = 0) in vec3 aPos;
@@ -61,14 +59,6 @@ int main(int argc, char *argv[]) {
         vs = glCreateShader(GL_VERTEX_SHADER);
         glShaderSource(vs, 1, &vsSource, NULL);
         glCompileShader(vs);
-
-        // Check compilation
-        glGetShaderiv(vs, GL_COMPILE_STATUS, &success);
-        if (!success) {
-            glGetShaderInfoLog(vs, 512, NULL, infoLog);
-            spdlog::critical("[VertexShader] Compilation failed : {}", infoLog);
-            debug_break();
-        }
     }
 
     // ------------------ Fragment shader
@@ -86,15 +76,6 @@ int main(int argc, char *argv[]) {
         fs = glCreateShader(GL_FRAGMENT_SHADER);
         glShaderSource(fs, 1, &fsSource, NULL);
         glCompileShader(fs);
-
-        // Check compilation
-        int success;
-        glGetShaderiv(fs, GL_COMPILE_STATUS, &success);
-        if (!success) {
-            glGetShaderInfoLog(fs, 512, NULL, infoLog);
-            spdlog::critical("[FragmentShader] Compilation failed : {}", infoLog);
-            debug_break();
-        }
     }
 
     // ------------------ Pipeline
@@ -104,14 +85,6 @@ int main(int argc, char *argv[]) {
         glAttachShader(pipeline, vs);
         glAttachShader(pipeline, fs);
         glLinkProgram(pipeline);
-
-        // Check compilation
-        glGetProgramiv(pipeline, GL_LINK_STATUS, &success);
-        if (!success) {
-            glGetProgramInfoLog(pipeline, 512, NULL, infoLog);
-            spdlog::critical("[Pipeline] Link failed : {}", infoLog);
-            debug_break();
-        }
 
         // Delete useless data
         glDeleteShader(vs);
