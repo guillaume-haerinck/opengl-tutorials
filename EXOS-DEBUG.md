@@ -179,23 +179,48 @@ ___
 
 ### 🤔 The problem
 
-
+To updates the uniforms you need to know their names with string, which is error-prone.
 
 ### 🧐 What is available ?
 
-
+OpenGL returns -1 with glGetUniformLocation if the uniform does not exist. We need to handle this result.
 
 ### 👌 The concrete solution
 
+Asking for the location of the uniform each time that we need to update it is ineficcient. Instead, let's store this result and reuse it each time that we need it :
+
+```C++
+
+#include <string>
+#include <unordered_map>
+
+std::unordered_map<std::string, int> uniformLocationCache;
+
+int getUniformLocation(const std::string& name, unsigned int pipeline) {
+    if (uniformLocationCache.find(name) != uniformLocationCache.end()) {
+		return uniformLocationCache[name];
+	}
+
+	GLCall(int location = glGetUniformLocation(pipeline, name.c_str()));
+	if (location == -1) {
+		spdlog::warn("[Shader] uniform '{}' doesn't exist !", name);
+        debug_break();
+	}
+	uniformLocationCache[name] = location;
+	return location;
+}
+```
 
 ### 💪 The exercice
 
 Modify the `CMakeLists.txt` at the line 12 with `file(GLOB_RECURSE MY_SOURCES src/debug-04/*)` and open the `debug-04/main.cpp`.
 
+Nothing on screen ! Time to check RenderDoc to see where this might come from. Then go back to the source code and check if the uniform does exist.
 
 <details><summary>Correction</summary>
 
-There were X errors to fix :
+There were 1 error to fix :
+- line 152: model to uModel
 
 </details>
 
