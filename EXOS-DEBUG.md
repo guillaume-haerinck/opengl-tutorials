@@ -21,9 +21,13 @@ This is it !
 line 57 ;
 line 82 FragColor
 
+Use renderdoc to inspect data
+
 ## EX 03 - Buffers everywhere
 
 > Learn to use RenderDoc to Debug OpenGL buffers
+
+
 
 ## EX 04 - Uniforms in shape
 
