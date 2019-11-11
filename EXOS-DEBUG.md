@@ -2,6 +2,14 @@
 
 Through these exercices, you will improve your skills to catch OpenGL errors. You will understand how to detect and prevent them.
 
+## Table of Contents
+
++ [Catch OpenGL API errors](#01---call-me-maybe)
++ [Catch Shader errors](#02---50-shades-of-errors)
++ [Debug buffer data](#03---buffers-everywhere)
++ [Uniforms handling](#04---uniforms-in-shape)
++ [Everything together](#05---cube-mesh-and-the-universe)
+
 ___
 
 ## 01 - Call me maybe

@@ -2,6 +2,12 @@
 
 Tutorials made by IMAC students to learn OpenGL.
 
+## Table of Contents
+
++ [Getting started](#getting-started)
++ [Tutorials](#tutorials)
+    - [Debug](#debug)
+
 ## Getting Started
 
 ### Prerequisites
@@ -45,3 +51,9 @@ Open this folder with the `CMake...` option in file->open on Visual Studio, and 
 #### `Option 3: VSCode`
 
 Use the `CMakeTools` plugin, build with `f7` then run with `f5` (But be carefull to be on the right platform, there is a launch file for windows and for linux).
+
+## Tutorials
+
+### Debug
+
+[Readme](EXOS-DEBUG.md)
