@@ -1,7 +1,5 @@
 #include <SDL2/SDL.h>
 #include <glad/glad.h>
-#include <imgui.h>
-#include <imgui_impl_sdl.h>
 
 #include "common/app.h"
 
@@ -44,7 +42,6 @@ int main(int argc, char *argv[]) {
     while (app.isRunning()) {
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
-            ImGui_ImplSDL2_ProcessEvent(&e);
             switch (e.type) {
             case SDL_QUIT: app.exit();
 

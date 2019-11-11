@@ -1,11 +1,8 @@
 #include <SDL2/SDL.h>
 #include <glad/glad.h>
-#include <imgui.h>
-#include <imgui_impl_sdl.h>
-#include <spdlog/spdlog.h>
-#include <debug_break/debug_break.h>
 
 #include "common/app.h"
+#include "common/gl-exception.h"
 
 int main(int argc, char *argv[]) {
     App app;
@@ -21,27 +18,26 @@ int main(int argc, char *argv[]) {
             0.0f,  0.5f, 0.0f
         };
         
-        glGenBuffers(1, &vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        GLCall(glGenBuffers(1, &vbo));
+        GLCall(glBindBuffer(GL_ARRAY_BUFFER, vbo));
+        GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW));
+        GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
     }
     
-
     // ------------------ Vertex Array
     unsigned int vao;
     {
-        glGenVertexArrays(1, &vao);
-        glBindVertexArray(vao);
+        GLCall(glGenVertexArrays(1, &vao));
+        GLCall(glBindVertexArray(vao));
 
         // Vertex input description
         {
-            glEnableVertexAttribArray(0);
-            glBindBuffer(GL_ARRAY_BUFFER, vbo);
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
+            GLCall(glEnableVertexAttribArray(0));
+            GLCall(glBindBuffer(GL_ARRAY_BUFFER, vbo));
+            GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL));
         }
-        
-        glBindVertexArray(0);
+
+        GLCall(glBindVertexArray(0));
     }
     
 
@@ -96,7 +92,6 @@ int main(int argc, char *argv[]) {
     while (app.isRunning()) {
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
-            ImGui_ImplSDL2_ProcessEvent(&e);
             switch (e.type) {
             case SDL_QUIT: app.exit();
 

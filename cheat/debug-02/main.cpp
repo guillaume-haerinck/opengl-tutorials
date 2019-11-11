@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
 
     glClearColor(1, 0, 1, 1);
 
-     // ------------------ Vertex Buffer
+    // ------------------ Vertex Buffer
     unsigned int vbo;
     {
         float vertices[] = {
@@ -63,7 +63,7 @@ int main(int argc, char *argv[]) {
         GLCall(glCompileShader(vs));
 
         // Check compilation
-        glGetShaderiv(vs, GL_COMPILE_STATUS, &success);
+        GLCall(glGetShaderiv(vs, GL_COMPILE_STATUS, &success));
         if (!success) {
             GLCall(glGetShaderInfoLog(vs, 512, NULL, infoLog));
             spdlog::critical("[VertexShader] Compilation failed : {}", infoLog);
