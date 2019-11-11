@@ -4,9 +4,27 @@
 #include <debug_break/debug_break.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <string>
+#include <unordered_map>
 
 #include "common/app.h"
 #include "common/gl-exception.h"
+
+std::unordered_map<std::string, int> uniformLocationCache;
+
+int getUniformLocation(const std::string& name, unsigned int pipeline) {
+    if (uniformLocationCache.find(name) != uniformLocationCache.end()) {
+		return uniformLocationCache[name];
+	}
+
+	GLCall(int location = glGetUniformLocation(pipeline, name.c_str()));
+	if (location == -1) {
+		spdlog::warn("[Shader] uniform '{}' doesn't exist !", name);
+        debug_break();
+	}
+	uniformLocationCache[name] = location;
+	return location;
+}
 
 int main(int argc, char *argv[]) {
     App app;
@@ -148,10 +166,7 @@ int main(int argc, char *argv[]) {
     glm::mat4 modelMat = glm::mat4(1.0f);
     {
         GLCall(glUseProgram(pipeline));
-
-        modelMatUniform = glGetUniformLocation(pipeline, "model");
-        GLCall(glUniformMatrix4fv(modelMatUniform, 1, GL_FALSE, &modelMat[0][0]));
-
+        GLCall(glUniformMatrix4fv(getUniformLocation("uModel", pipeline), 1, GL_FALSE, &modelMat[0][0]));
         GLCall(glUseProgram(0));
     }
 
@@ -176,7 +191,7 @@ int main(int argc, char *argv[]) {
         // Draw call
         GLCall(glUseProgram(pipeline));
         modelMat = glm::rotate(glm::mat4(1.0f), counter, glm::vec3(0, 1, 0));
-        GLCall(glUniformMatrix4fv(modelMatUniform, 1, GL_FALSE, &modelMat[0][0]));
+        GLCall(glUniformMatrix4fv(getUniformLocation("uModel", pipeline), 1, GL_FALSE, &modelMat[0][0]));
         GLCall(glBindVertexArray(vao));
         GLCall(glDrawArrays(GL_TRIANGLES, 0, 3));
 
