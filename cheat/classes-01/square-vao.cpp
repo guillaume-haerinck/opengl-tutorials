@@ -3,12 +3,12 @@
 
 SquareVao::SquareVao() {
 	// Generate buffers
+	GLCall(glGenBuffers(1, &m_iboID));
 	GLCall(glGenBuffers(1, &m_vboPositionID));
 	GLCall(glGenBuffers(1, &m_vboColorID));
 	GLCall(glGenVertexArrays(1, &m_vaoID));
 
 	// Create index buffer (a.k.a. ibo)
-	GLCall(glGenBuffers(1, &m_iboID));
 	unsigned int iboData[] = {
 		0, 1, 2,
 		0, 2, 3
