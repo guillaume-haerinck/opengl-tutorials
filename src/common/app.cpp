@@ -74,9 +74,9 @@ void App::initSDL() {
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);	
 	
 	m_window = SDL_CreateWindow(
-		"OpenGL Playground",
+		"OpenGL Tutorials !",
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-		500, 500,
+		650, 650,
 		SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI
     );
 	if (m_window == nullptr) {
