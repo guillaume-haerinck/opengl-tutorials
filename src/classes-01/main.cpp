@@ -8,62 +8,14 @@
 #include "common/app.h"
 #include "common/gl-exception.h"
 
+#include "square-vao.hpp"
+
 int main(int argc, char *argv[]) {
     App app;
 
     glClearColor(1, 0, 1, 1);
 
-    // ------------------ Vertex Buffer 1
-    unsigned int posVB;
-    {
-        float positions[] = {
-            -0.5f, -0.5f, 0.0f,
-            0.5f, -0.5f, 0.0f,
-            0.0f,  0.5f, 0.0f
-        };
-        
-        GLCall(glGenBuffers(1, &posVB));
-        GLCall(glBindBuffer(GL_ARRAY_BUFFER, posVB));
-        GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW));
-        GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    }
-
-    // ------------------ Vertex Buffer 2
-    unsigned int colorVB;
-    {
-        float colors[] = {
-            1, 0, 0,
-            0, 1, 0,
-            0, 0, 1
-        };
-        
-        GLCall(glGenBuffers(1, &colorVB));
-        GLCall(glBindBuffer(GL_ARRAY_BUFFER, colorVB));
-        GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW));
-        GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    }
-    
-
-    // ------------------ Vertex Array
-    unsigned int vao;
-    {
-        GLCall(glGenVertexArrays(1, &vao));
-        GLCall(glBindVertexArray(vao));
-
-        // Vertex input description
-        {
-            GLCall(glEnableVertexAttribArray(0));
-            GLCall(glBindBuffer(GL_ARRAY_BUFFER, posVB));
-            GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL));
-
-            GLCall(glEnableVertexAttribArray(1));
-            GLCall(glBindBuffer(GL_ARRAY_BUFFER, colorVB));
-            GLCall(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL));
-        }
-        
-        GLCall(glBindVertexArray(0));
-    }
-    
+	SquareVao squareVAO;
 
     // ------------------ Vertex shader
     unsigned int vs;
@@ -71,15 +23,10 @@ int main(int argc, char *argv[]) {
     char infoLog[512];
     {
         const char* vsSource = R"(#version 330 core
-            layout (location = 0) in vec3 aPos;
-            layout (location = 1) in vec3 aColor;
-
-            uniform mat4 uModel;
-            out vec3 vColor;
+            layout (location = 0) in vec2 aPos;
 
             void main() {
-                vColor = aColor;
-                gl_Position = vec4(aPos, 1.0) * uModel;
+                gl_Position = vec4(aPos, 0.0, 1.0) ;
             }
         )";
         
@@ -101,10 +48,9 @@ int main(int argc, char *argv[]) {
     {
         const char* fsSource = R"(#version 330 core
             out vec4 FragColor;
-            in vec3 vColor;
 
             void main() {
-                FragColor = vec4(vColor, 1.0f);
+                FragColor = vec4(1.0f);
             } 
         )";
         
@@ -166,19 +112,10 @@ int main(int argc, char *argv[]) {
             };
         }
 
-        counter += 0.1f;
-        if (counter > 100) {
-            counter = 0;
-        }
-
         app.beginFrame();
 
         // Draw call
-        GLCall(glUseProgram(pipeline));
-        modelMat = glm::rotate(glm::mat4(1.0f), counter, glm::vec3(0, 1, 0));
-        GLCall(glUniformMatrix4fv(modelMatUniform, 1, GL_FALSE, &modelMat[0][0]));
-        GLCall(glBindVertexArray(vao));
-        GLCall(glDrawArrays(GL_TRIANGLES, 0, 3));
+		squareVAO.draw();
 
         app.endFrame();
     }
