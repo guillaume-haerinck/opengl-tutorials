@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
             uniform mat4 uViewProj;
 
             void main() {
-                gl_Position = vec4(aPos, 1.0) * uModel * uViewProj;
+                gl_Position = uViewProj * uModel * vec4(aPos, 1.0);
             }
         )";
         
@@ -164,7 +164,7 @@ int main(int argc, char *argv[]) {
             };
         }
 
-        counter += 0.1f;
+        counter += 0.05f;
         if (counter > 100) {
             counter = 0;
         }
@@ -178,7 +178,9 @@ int main(int argc, char *argv[]) {
             GLCall(glUniformMatrix4fv(getUniformLocation("uModel", pipeline), 1, GL_FALSE, &modelMat[0][0]));
         }
         {
-            viewProjMat = glm::mat4(1.0f);
+            glm::mat4 viewMat = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -10.0f));
+            glm::mat4 projMat = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
+            viewProjMat = projMat * viewMat;
             GLCall(glUniformMatrix4fv(getUniformLocation("uViewProj", pipeline), 1, GL_FALSE, &viewProjMat[0][0]));
         }
 
