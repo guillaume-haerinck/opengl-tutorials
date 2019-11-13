@@ -14,6 +14,10 @@ ___
 
 ## 01 - Call me maybe
 
+<p align="center">
+<img src="img/debug-01.png" height="200px" alt="Final result">
+</p>
+
 > Learn to get OpenGL errors when calling functions
 
 ### 🤔 The problem
@@ -83,6 +87,10 @@ ___
 
 ## 02 - 50 shades of errors
 
+<p align="center">
+<img src="img/debug-02.png" height="200px" alt="Final result">
+</p>
+
 > Learn to get OpenGL shader building errors
 
 ### 🤔 The problem
@@ -139,6 +147,10 @@ ___
 
 ## 03 - Buffers everywhere
 
+<p align="center">
+<img src="img/debug-03.png" height="200px" alt="Final result">
+</p>
+
 > Learn to use RenderDoc to Debug OpenGL buffers
 
 ### 🤔 The problem
@@ -157,15 +169,27 @@ At the first opening, this software can be a bit scary. Don't worry, you will ge
 
 Modify the `CMakeLists.txt` at the line 12 with `file(GLOB_RECURSE MY_SOURCES src/debug-03/*)` and open the `debug-03/main.cpp`. Build and launch.
 
-Strange right ? There should be a colored triangle, but nothing is printed on screen and no errors are reported by OpenGL ! There is only one way to know what happens, Open [RenderDoc](https://renderdoc.org/), launch and analyse the buffer data !
+Strange right ? There should be a colored triangle, but nothing is printed on screen and no errors are reported by OpenGL ! There is only one way to know what happens, Open [RenderDoc](https://renderdoc.org/), launch and analyze the buffer data !
 
 Then have a look on the Vertex input description in your source file and try to fix the problem.
 
 <details><summary>Correction</summary>
 
-There were 2 errors to fix :
-- `line 57` : glEnableVertexAttribArray(0) to glEnableVertexAttribArray(1)
-- `line 59` : glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 1 * sizeof(char), NULL) to glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL)
+We can see that we made a mistake when creating the second buffer.
+
+<p align="center">
+<img src="img/disabled-buffer.png" alt="RenderDoc screenshot">
+</p>
+
+`line 57` : glEnableVertexAttribArray(0) to glEnableVertexAttribArray(1)
+
+We can also see that the first buffer is not well laid-out
+
+<p align="center">
+<img src="img/corrupted-vertex-buffer.png" alt="RenderDoc screenshot">
+</p>
+
+`line 59` : glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 1 * sizeof(char), NULL) to glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL)
 
 </details>
 
@@ -174,6 +198,10 @@ If, even with the correction, you can't make it, go check `cheat/debug-03/main.c
 ___
 
 ## 04 - Uniforms in shape
+
+<p align="center">
+<img src="img/debug-04.gif" height="200px" alt="Final result">
+</p>
 
 > Updates uniforms in a safer way
 
@@ -219,6 +247,12 @@ Nothing on screen ! Time to check RenderDoc to see where this might come from. T
 
 <details><summary>Correction</summary>
 
+You can see that the uniform location is -1 (it means that it is not linked properly), and that the data does not correspond to an identity matrix. We made an error when spelling the name.
+
+<p align="center">
+<img src="img/corrupted-uniform.png" alt="RenderDoc screenshot">
+</p>
+
 There were 1 error to fix :
 
 - `line 152` : model to uModel
@@ -230,6 +264,10 @@ If, even with the correction, you can't make it, go check `cheat/debug-04/main.c
 ___
 
 ## 05 - Cube, mesh, and the universe
+
+<p align="center">
+<img src="img/debug-05.gif" height="200px" alt="Final result">
+</p>
 
 > Display a cube in 3D and use RenderDoc to check for data inconsistency
 
