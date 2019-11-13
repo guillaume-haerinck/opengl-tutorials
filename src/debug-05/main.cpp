@@ -75,9 +75,10 @@ int main(int argc, char *argv[]) {
             layout (location = 0) in vec3 aPos;
 
             uniform mat4 uModel;
+            uniform mat4 uViewProj;
 
             void main() {
-                gl_Position = vec4(aPos, 1.0) * uModel;
+                gl_Position = vec4(aPos, 1.0) * uModel * uViewProj;
             }
         )";
         
@@ -143,9 +144,12 @@ int main(int argc, char *argv[]) {
     // ------------------ Uniforms
     int modelMatUniform;
     glm::mat4 modelMat = glm::mat4(1.0f);
+    int viewProjMatUniform;
+    glm::mat4 viewProjMat = glm::mat4(1.0f);
     {
         GLCall(glUseProgram(pipeline));
         GLCall(glUniformMatrix4fv(getUniformLocation("uModel", pipeline), 1, GL_FALSE, &modelMat[0][0]));
+        GLCall(glUniformMatrix4fv(getUniformLocation("uViewProj", pipeline), 1, GL_FALSE, &viewProjMat[0][0]));
         GLCall(glUseProgram(0));
     }
 
@@ -167,13 +171,21 @@ int main(int argc, char *argv[]) {
 
         app.beginFrame();
 
-        // Draw call
+        // Update uniforms
         GLCall(glUseProgram(pipeline));
-        modelMat = glm::rotate(glm::mat4(1.0f), counter, glm::vec3(0, 1, 0));
-        GLCall(glUniformMatrix4fv(getUniformLocation("uModel", pipeline), 1, GL_FALSE, &modelMat[0][0]));
+        {
+            modelMat = glm::rotate(glm::mat4(1.0f), counter, glm::vec3(0, 1, 0));
+            GLCall(glUniformMatrix4fv(getUniformLocation("uModel", pipeline), 1, GL_FALSE, &modelMat[0][0]));
+        }
+        {
+            viewProjMat = glm::mat4(1.0f);
+            GLCall(glUniformMatrix4fv(getUniformLocation("uViewProj", pipeline), 1, GL_FALSE, &viewProjMat[0][0]));
+        }
+
+        // Draw call
         GLCall(glBindVertexArray(vao));
         GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib));
-        GLCall(glDrawElements(GL_TRIANGLES, std::size(squareData::indices), GL_UNSIGNED_SHORT, 0));
+        GLCall(glDrawElements(GL_TRIANGLES, std::size(squareData::indices), GL_UNSIGNED_SHORT, (void*) 0));
 
         app.endFrame();
     }
