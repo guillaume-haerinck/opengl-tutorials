@@ -35,34 +35,12 @@ int main(int argc, char *argv[]) {
     // ------------------ Vertex Buffer 1
     unsigned int posVB;
     {
-        float positions[] = {
-            -0.5f, -0.5f, 0.0f,
-            0.5f, -0.5f, 0.0f,
-            0.0f,  0.5f, 0.0f
-        };
-        
         GLCall(glGenBuffers(1, &posVB));
         GLCall(glBindBuffer(GL_ARRAY_BUFFER, posVB));
-        GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW));
-        GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    }
-
-    // ------------------ Vertex Buffer 2
-    unsigned int colorVB;
-    {
-        float colors[] = {
-            1, 0, 0,
-            0, 1, 0,
-            0, 0, 1
-        };
-        
-        GLCall(glGenBuffers(1, &colorVB));
-        GLCall(glBindBuffer(GL_ARRAY_BUFFER, colorVB));
-        GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW));
+        GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(squareData::positions), squareData::positions, GL_STATIC_DRAW));
         GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
     }
     
-
     // ------------------ Vertex Array
     unsigned int vao;
     {
@@ -74,15 +52,19 @@ int main(int argc, char *argv[]) {
             GLCall(glEnableVertexAttribArray(0));
             GLCall(glBindBuffer(GL_ARRAY_BUFFER, posVB));
             GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL));
-
-            GLCall(glEnableVertexAttribArray(1));
-            GLCall(glBindBuffer(GL_ARRAY_BUFFER, colorVB));
-            GLCall(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL));
         }
         
         GLCall(glBindVertexArray(0));
     }
-    
+
+    // ------------------ Index buffer
+    unsigned int ib;
+    {
+        GLCall(glGenBuffers(1, &ib));
+        GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib));
+        GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(squareData::indices), squareData::indices, GL_STATIC_DRAW));
+        GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+    }
 
     // ------------------ Vertex shader
     unsigned int vs;
@@ -91,13 +73,10 @@ int main(int argc, char *argv[]) {
     {
         const char* vsSource = R"(#version 330 core
             layout (location = 0) in vec3 aPos;
-            layout (location = 1) in vec3 aColor;
 
             uniform mat4 uModel;
-            out vec3 vColor;
 
             void main() {
-                vColor = aColor;
                 gl_Position = vec4(aPos, 1.0) * uModel;
             }
         )";
@@ -120,10 +99,9 @@ int main(int argc, char *argv[]) {
     {
         const char* fsSource = R"(#version 330 core
             out vec4 FragColor;
-            in vec3 vColor;
 
             void main() {
-                FragColor = vec4(vColor, 1.0f);
+                FragColor = vec4(1.0f, 0.0f, 0.0f, 1.0f);
             } 
         )";
         
@@ -194,7 +172,8 @@ int main(int argc, char *argv[]) {
         modelMat = glm::rotate(glm::mat4(1.0f), counter, glm::vec3(0, 1, 0));
         GLCall(glUniformMatrix4fv(getUniformLocation("uModel", pipeline), 1, GL_FALSE, &modelMat[0][0]));
         GLCall(glBindVertexArray(vao));
-        GLCall(glDrawArrays(GL_TRIANGLES, 0, 3));
+        GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib));
+        GLCall(glDrawElements(GL_TRIANGLES, std::size(squareData::indices), GL_UNSIGNED_SHORT, 0));
 
         app.endFrame();
     }
