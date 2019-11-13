@@ -7,6 +7,7 @@ Tutorials made by IMAC students to learn OpenGL.
 + [Getting started](#getting-started)
 + [Tutorials](#tutorials)
     - [Debug](#debug)
+    - [Abstraction](#abstraction)
 
 ## Getting Started
 
@@ -56,4 +57,8 @@ Use the `CMakeTools` plugin, build with `f7` then run with `f5` (But be carefull
 
 ### Debug
 
-[Readme](EXOS-DEBUG.md)
+Follow [this tutorial](doc/EXOS-DEBUG.md).
+
+### Abstraction
+
+Follow [this tutorial](doc/EXOS-CLASSES.md).
