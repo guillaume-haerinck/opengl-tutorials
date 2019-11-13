@@ -231,30 +231,63 @@ ___
 
 ## 05 - Cube, mesh, and the universe
 
-> Display a cube in 3D and use RenderDoc to check for data inconsistensy
+> Display a cube in 3D and use RenderDoc to check for data inconsistency
 
 ### 🤔 The problem
 
+Some problems can make your program crash before you open it. We're going to handle this case with everything we've done before.
 
 ### 🧐 What is available ?
 
+Everything that we've seen before ! This is a best-of the worst.
 
 ### 👌 The concrete solution
 
+Proceed step by step. At first, prevent your program from crashing by setting up breakpoints and commenting-out draw calls. Then analyse your data with RenderDoc and fix it progressively.
 
 ### 💪 The exercice
 
 Modify the `CMakeLists.txt` at the line 12 with `file(GLOB_RECURSE MY_SOURCES src/debug-05/*)` and open the `debug-05/main.cpp`.
 
-When there is an execution problem, comment out the draw call, and check the buffers with RenderDoc.
+When there is an execution problem, start by commenting out the draw call. If it launches, go check the buffers with RenderDoc.
 
 <details><summary>Step 01 Correction</summary>
 Comment out the line 190 and launch the program with RenderDoc.
 
 If you check the buffer in the Pipeline State, you will see that it has a ByteLength of 0. It is empty.
 
+<p align="center">
+<img src="img/empty-vertex-buffer.png" alt="RenderDoc screenshot">
+</p>
+
 Go check line 40 and fix the buffer allocation data.
 </details>
+
+Great ! Now you have your data, but there is still nothing on screen. Time for another round with render doc to check if what contains the Vertex Buffer.
+
+<details><summary>Step 02 Correction</summary>
+If you check the buffer data, you will see that it is not lisible, even though it is not empty. This means that we haven't properly said to OpenGL how the data is laid out.
+
+<p align="center">
+<img src="img/cannot-read-vertex-buffer.png" alt="RenderDoc screenshot">
+</p>
+
+Go check line 54 and fix the layout.
+</details>
+
+Almost there, but still nothing on screen. If we launch RenderDoc again, we can check that the indexed-draw does have indices.
+
+<details><summary>Step 03 Correction</summary>
+If you check the buffer data, you will see that the indices are always 0.
+
+<p align="center">
+<img src="img/null-index-buffer.png" alt="RenderDoc screenshot">
+</p>
+
+Go check line 65 and ensure that some data is sent.
+</details>
+
+Woo there is a flat cube ! But why is it flat ? Check your uniforms see if they are updated correctly.
 
 <details><summary>Correction</summary>
 
