@@ -72,8 +72,8 @@ Now you can wrap you OpenGL calls with GLCall, and debug the errors in the file.
 
 There were 2 mistakes to find :
 
-- line 24, 25, 26 : GL_FRAMEBUFFER to GL_ARRAY_BUFFER 
-- line 31 :  glGenVertexArrays(0, &vao); to  glGenVertexArrays(1, &vao);
+- `line 24, 25, 26` : GL_FRAMEBUFFER to GL_ARRAY_BUFFER 
+- `line 31` :  glGenVertexArrays(0, &vao); to  glGenVertexArrays(1, &vao);
 
 </details>
 
@@ -127,9 +127,9 @@ Then check errors with the vertex shader and the fragment shader compilation, an
 
 There were 3 errors to fix :
 
-- line 53, 77 : Shader version must be first line
-- line 57 : missing ;
-- line 82 : FragColor
+- `line 53, 77` : Shader version must be first line
+- `line 57` : missing ;
+- `line 82` : FragColor
 
 </details>
 
@@ -164,8 +164,8 @@ Then have a look on the Vertex input description in your source file and try to 
 <details><summary>Correction</summary>
 
 There were 2 errors to fix :
-- line 57: glEnableVertexAttribArray(0) to glEnableVertexAttribArray(1)
-- line 59: glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 1 * sizeof(char), NULL) to glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL)
+- `line 57` : glEnableVertexAttribArray(0) to glEnableVertexAttribArray(1)
+- `line 59` : glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 1 * sizeof(char), NULL) to glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL)
 
 </details>
 
@@ -220,7 +220,8 @@ Nothing on screen ! Time to check RenderDoc to see where this might come from. T
 <details><summary>Correction</summary>
 
 There were 1 error to fix :
-- line 152: model to uModel
+
+- `line 152` : model to uModel
 
 </details>
 
@@ -245,10 +246,24 @@ ___
 
 Modify the `CMakeLists.txt` at the line 12 with `file(GLOB_RECURSE MY_SOURCES src/debug-05/*)` and open the `debug-05/main.cpp`.
 
+When there is an execution problem, comment out the draw call, and check the buffers with RenderDoc.
+
+<details><summary>Step 01 Correction</summary>
+Comment out the line 190 and launch the program with RenderDoc.
+
+If you check the buffer in the Pipeline State, you will see that it has a ByteLength of 0. It is empty.
+
+Go check line 40 and fix the buffer allocation data.
+</details>
 
 <details><summary>Correction</summary>
 
-There were X errors to fix :
+There were 4 errors to fix :
+
+- `line 40` : glBufferData(GL_ARRAY_BUFFER, 0, squareData::positions, GL_STATIC_DRAW) to glBufferData(GL_ARRAY_BUFFER, sizeof(squareData::positions), squareData::positions, GL_STATIC_DRAW)
+- `line 54` : glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3, NULL) to glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL)
+- `line 65` : glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(squareData::indices), 0, GL_STATIC_DRAW) to glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(squareData::indices), squareData::indices, GL_STATIC_DRAW)
+- `line 184` : &modelMat[0][0] to &viewProjMat[0][0]
 
 </details>
 

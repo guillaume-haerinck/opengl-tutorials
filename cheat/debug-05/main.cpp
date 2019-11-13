@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
     {
         GLCall(glGenBuffers(1, &posVB));
         GLCall(glBindBuffer(GL_ARRAY_BUFFER, posVB));
-        GLCall(glBufferData(GL_ARRAY_BUFFER, 0, squareData::positions, GL_STATIC_DRAW));
+        GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(squareData::positions), squareData::positions, GL_STATIC_DRAW));
         GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
     }
     
@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
         {
             GLCall(glEnableVertexAttribArray(0));
             GLCall(glBindBuffer(GL_ARRAY_BUFFER, posVB));
-            GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3, NULL));
+            GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL));
         }
         
         GLCall(glBindVertexArray(0));
@@ -62,7 +62,7 @@ int main(int argc, char *argv[]) {
     {
         GLCall(glGenBuffers(1, &ib));
         GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib));
-        GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(squareData::indices), 0, GL_STATIC_DRAW));
+        GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(squareData::indices), squareData::indices, GL_STATIC_DRAW));
         GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
     }
 
@@ -181,7 +181,7 @@ int main(int argc, char *argv[]) {
             glm::mat4 viewMat = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -10.0f));
             glm::mat4 projMat = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
             viewProjMat = projMat * viewMat;
-            GLCall(glUniformMatrix4fv(getUniformLocation("uViewProj", pipeline), 1, GL_FALSE, &modelMat[0][0]));
+            GLCall(glUniformMatrix4fv(getUniformLocation("uViewProj", pipeline), 1, GL_FALSE, &viewProjMat[0][0]));
         }
 
         // Draw call
