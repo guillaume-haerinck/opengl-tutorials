@@ -19,10 +19,13 @@ ___
 ### 🧐👌 Moving the code into a class !
 
 First, go to the empty ShaderPipeline.hpp file and declare your class : we need a constructor, a destructor, and what else ?
+
 Try to fill in as much as you can ! :)
+
 What are the methods you can think of ? Which arguments does our constructor require ? What are the private member(s) we need to store to access our pipeline on the GPU ?
 
 Then start looking in the main and cut-paste the code in the body of the corresponding methods, replacing code in the main by the creation and calls to an instance of ShaderPipeline.
+
 You will probably have to add methods you didn't think of, that's normal ;)
 
 <details><summary>Solution</summary>
@@ -316,5 +319,7 @@ std::string ShaderPipeline::readFile(const std::string& filepath) {
 ```
 
 Add this in your .cpp, and add the declaration to the .hpp.
+
 And now, let's change the constructor to take the filepath to the vertex and fragment shader instead of the source code directly.
+
 Once you're done, change the construction of the pipeline in your main to use to shader files that are in the "res" folder and try to run it ! : it should work just as before, but the code is so much cleaner :heart: Well done !
