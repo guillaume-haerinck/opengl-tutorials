@@ -6,19 +6,17 @@ In order to do so without too much pain, we first need to put all that code into
 
 ## Table of Contents
 
-+ [Shaders pipeline](#01---shaders-pipeline)
-+ [Catch Shader errors](#02---50-shades-of-errors)
++ [ShaderPipeline class](#01---shaderpipeline-class)
++ [ShaderPipeline improvements !](#02---shaderpipeline-improvements)
 + [Debug buffer data](#03---buffers-everywhere)
 + [Uniforms handling](#04---uniforms-in-shape)
 + [Everything together](#05---cube-mesh-and-the-universe)
 
 ___
 
-## 01 - Shaders Pipeline
+## 01 - ShaderPipeline class
 
-> Open shaders from files, compile them into a pipepline, and bind uniforms in one line !
-
-### 🧐👌 Moving the code into a class !
+> Compile shaders into a pipepline and bind uniforms in one line !
 
 First, go to the empty ShaderPipeline.hpp file and declare your class : we need a constructor, a destructor, and what else ?
 
@@ -289,7 +287,9 @@ int main(int argc, char *argv[]) {
 
 </details>
 
-### 🧐 Improving the code : read shaders from a file instead of writting it as a string in the .cpp
+## 02 - ShaderPipeline improvements
+
+> Read shaders from a file instead of writting it as a string in the .cpp
 
 #### 🤔 The problem
 
