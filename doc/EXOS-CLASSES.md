@@ -1,6 +1,8 @@
 ﻿# Abstracting OpenGL objects
 
-Moving on from the Debug exercises, which lead us to drawing a cube, we will now try to draw several of them with different shader-pipelines. In order to do so without too much pain, we first need to put all that code into classes to be able to reuse it easily.
+Moving on from the Debug exercises, which lead us to drawing a cube, we will now try to draw several of them with different shader-pipelines.
+
+In order to do so without too much pain, we first need to put all that code into classes to be able to reuse it easily.
 
 ## Table of Contents
 
