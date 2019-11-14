@@ -14,6 +14,10 @@ ___
 
 ## 01 - Call me maybe
 
+<p align="center">
+<img src="img/debug-01.png" height="200px" alt="Final result">
+</p>
+
 > Learn to get OpenGL errors when calling functions
 
 ### 🤔 The problem
@@ -72,8 +76,8 @@ Now you can wrap you OpenGL calls with GLCall, and debug the errors in the file.
 
 There were 2 mistakes to find :
 
-- line 24, 25, 26 : GL_FRAMEBUFFER to GL_ARRAY_BUFFER 
-- line 31 :  glGenVertexArrays(0, &vao); to  glGenVertexArrays(1, &vao);
+- `line 24, 25, 26` : GL_FRAMEBUFFER to GL_ARRAY_BUFFER 
+- `line 31` :  glGenVertexArrays(0, &vao); to  glGenVertexArrays(1, &vao);
 
 </details>
 
@@ -82,6 +86,10 @@ If, even with the correction, you can't make it, go check `cheat/debug-01/main.c
 ___
 
 ## 02 - 50 shades of errors
+
+<p align="center">
+<img src="img/debug-02.png" height="200px" alt="Final result">
+</p>
 
 > Learn to get OpenGL shader building errors
 
@@ -127,9 +135,9 @@ Then check errors with the vertex shader and the fragment shader compilation, an
 
 There were 3 errors to fix :
 
-- line 53, 77 : Shader version must be first line
-- line 57 : missing ;
-- line 82 : FragColor
+- `line 53, 77` : Shader version must be first line
+- `line 57` : missing ;
+- `line 82` : FragColor
 
 </details>
 
@@ -138,6 +146,10 @@ If, even with the correction, you can't make it, go check `cheat/debug-02/main.c
 ___
 
 ## 03 - Buffers everywhere
+
+<p align="center">
+<img src="img/debug-03.png" height="200px" alt="Final result">
+</p>
 
 > Learn to use RenderDoc to Debug OpenGL buffers
 
@@ -157,15 +169,27 @@ At the first opening, this software can be a bit scary. Don't worry, you will ge
 
 Modify the `CMakeLists.txt` at the line 12 with `file(GLOB_RECURSE MY_SOURCES src/debug-03/*)` and open the `debug-03/main.cpp`. Build and launch.
 
-Strange right ? There should be a colored triangle, but nothing is printed on screen and no errors are reported by OpenGL ! There is only one way to know what happens, Open [RenderDoc](https://renderdoc.org/), launch and analyse the buffer data !
+Strange right ? There should be a colored triangle, but nothing is printed on screen and no errors are reported by OpenGL ! There is only one way to know what happens, Open [RenderDoc](https://renderdoc.org/), launch and analyze the buffer data !
 
 Then have a look on the Vertex input description in your source file and try to fix the problem.
 
 <details><summary>Correction</summary>
 
-There were 2 errors to fix :
-- line 57: glEnableVertexAttribArray(0) to glEnableVertexAttribArray(1)
-- line 59: glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 1 * sizeof(char), NULL) to glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL)
+We can see that we made a mistake when creating the second buffer.
+
+<p align="center">
+<img src="img/disabled-buffer.png" alt="RenderDoc screenshot">
+</p>
+
+`line 57` : glEnableVertexAttribArray(0) to glEnableVertexAttribArray(1)
+
+We can also see that the first buffer is not well laid-out
+
+<p align="center">
+<img src="img/corrupted-vertex-buffer.png" alt="RenderDoc screenshot">
+</p>
+
+`line 59` : glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 1 * sizeof(char), NULL) to glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL)
 
 </details>
 
@@ -174,6 +198,10 @@ If, even with the correction, you can't make it, go check `cheat/debug-03/main.c
 ___
 
 ## 04 - Uniforms in shape
+
+<p align="center">
+<img src="img/debug-04.gif" height="200px" alt="Final result">
+</p>
 
 > Updates uniforms in a safer way
 
@@ -219,8 +247,15 @@ Nothing on screen ! Time to check RenderDoc to see where this might come from. T
 
 <details><summary>Correction</summary>
 
+You can see that the uniform location is -1 (it means that it is not linked properly), and that the data does not correspond to an identity matrix. We made an error when spelling the name.
+
+<p align="center">
+<img src="img/corrupted-uniform.png" alt="RenderDoc screenshot">
+</p>
+
 There were 1 error to fix :
-- line 152: model to uModel
+
+- `line 152` : model to uModel
 
 </details>
 
@@ -230,25 +265,76 @@ ___
 
 ## 05 - Cube, mesh, and the universe
 
-> Display a cube in 3D and use RenderDoc to check for data inconsistensy
+<p align="center">
+<img src="img/debug-05.gif" height="200px" alt="Final result">
+</p>
+
+> Display a cube in 3D and use RenderDoc to check for data inconsistency
 
 ### 🤔 The problem
 
+Some problems can make your program crash before you open it. We're going to handle this case with everything we've done before.
 
 ### 🧐 What is available ?
 
+Everything that we've seen before ! This is a best-of the worst.
 
 ### 👌 The concrete solution
 
+Proceed step by step. At first, prevent your program from crashing by setting up breakpoints and commenting-out draw calls. Then analyse your data with RenderDoc and fix it progressively.
 
 ### 💪 The exercice
 
 Modify the `CMakeLists.txt` at the line 12 with `file(GLOB_RECURSE MY_SOURCES src/debug-05/*)` and open the `debug-05/main.cpp`.
 
+When there is an execution problem, start by commenting out the draw call. If it launches, go check the buffers with RenderDoc.
+
+<details><summary>Step 01 Correction</summary>
+Comment out the line 190 and launch the program with RenderDoc.
+
+If you check the buffer in the Pipeline State, you will see that it has a ByteLength of 0. It is empty.
+
+<p align="center">
+<img src="img/empty-vertex-buffer.png" alt="RenderDoc screenshot">
+</p>
+
+Go check line 40 and fix the buffer allocation data.
+</details>
+
+Great ! Now you have your data, but there is still nothing on screen. Time for another round with render doc to check if what contains the Vertex Buffer.
+
+<details><summary>Step 02 Correction</summary>
+If you check the buffer data, you will see that it is not lisible, even though it is not empty. This means that we haven't properly said to OpenGL how the data is laid out.
+
+<p align="center">
+<img src="img/cannot-read-vertex-buffer.png" alt="RenderDoc screenshot">
+</p>
+
+Go check line 54 and fix the layout.
+</details>
+
+Almost there, but still nothing on screen. If we launch RenderDoc again, we can check that the indexed-draw does have indices.
+
+<details><summary>Step 03 Correction</summary>
+If you check the buffer data, you will see that the indices are always 0.
+
+<p align="center">
+<img src="img/null-index-buffer.png" alt="RenderDoc screenshot">
+</p>
+
+Go check line 65 and ensure that some data is sent.
+</details>
+
+Woo there is a flat cube ! But why is it flat ? Check your uniforms see if they are updated correctly.
 
 <details><summary>Correction</summary>
 
-There were X errors to fix :
+There were 4 errors to fix :
+
+- `line 40` : glBufferData(GL_ARRAY_BUFFER, 0, squareData::positions, GL_STATIC_DRAW) to glBufferData(GL_ARRAY_BUFFER, sizeof(squareData::positions), squareData::positions, GL_STATIC_DRAW)
+- `line 54` : glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3, NULL) to glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL)
+- `line 65` : glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(squareData::indices), 0, GL_STATIC_DRAW) to glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(squareData::indices), squareData::indices, GL_STATIC_DRAW)
+- `line 184` : &modelMat[0][0] to &viewProjMat[0][0]
 
 </details>
 
