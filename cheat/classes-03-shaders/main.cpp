@@ -53,7 +53,7 @@ int main(int argc, char *argv[]) {
 
 	// ------------------ Shader pipeline
 
-	ShaderPipeline shaderPipeline("cheat/res/shader.vert", "cheat/res/shader.frag");
+	ShaderPipeline shaderPipeline("res/shader.vert", "res/shader.frag");
 
     float counter = 0.0f;
     while (app.isRunning()) {

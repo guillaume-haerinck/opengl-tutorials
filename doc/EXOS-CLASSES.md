@@ -317,4 +317,4 @@ std::string ShaderPipeline::readFile(const std::string& filepath) {
 
 Add this in your .cpp, and add the declaration to the .hpp.
 And now, let's change the constructor to take the filepath to the vertex and fragment shader instead of the source code directly.
-Once you're done, create the corresponding files in the res folder and try to run your main (after changing the arguments in the pipeline's constructor) : it should work just as before, but the code is so much cleaner :heart: Well done !
+Once you're done, change the construction of the pipeline in your main to use to shader files that are in the "res" folder and try to run it ! : it should work just as before, but the code is so much cleaner :heart: Well done !
