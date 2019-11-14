@@ -53,27 +53,7 @@ int main(int argc, char *argv[]) {
 
 	// ------------------ Shader pipeline
 
-	const char* vsSource = R"(#version 330 core
-            layout (location = 0) in vec3 aPos;
-
-            uniform mat4 uModel;
-            uniform mat4 uViewProj;
-
-            void main() {
-                gl_Position = uViewProj * uModel * vec4(aPos, 1.0);
-            }
-        )";
-
-
-	const char* fsSource = R"(#version 330 core
-            out vec4 FragColor;
-
-            void main() {
-                FragColor = vec4(1.0f, 0.0f, 0.0f, 1.0f);
-            } 
-        )";
-
-	ShaderPipeline shaderPipeline(vsSource, fsSource);
+	ShaderPipeline shaderPipeline("cheat/res/shader.vert", "cheat/res/shader.frag");
 
     float counter = 0.0f;
     while (app.isRunning()) {

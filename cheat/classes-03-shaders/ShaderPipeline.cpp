@@ -3,14 +3,19 @@
 #include "common/gl-exception.h"
 #include <spdlog/spdlog.h>
 
-ShaderPipeline::ShaderPipeline(const char* vsSource, const char* fsSource) {
+#include <fstream>
+#include <iostream>
+
+ShaderPipeline::ShaderPipeline(const std::string& vertexFilepath, const std::string& fragmentFilepath) {
 	// ------------------ Vertex shader
 	unsigned int vs;
 	int success;
 	char infoLog[512];
 	{
+		std::string vsSource = readFile(vertexFilepath);
+		const char* vsSourceCstr = vsSource.c_str();
 		vs = glCreateShader(GL_VERTEX_SHADER);
-		GLCall(glShaderSource(vs, 1, &vsSource, NULL));
+		GLCall(glShaderSource(vs, 1, &vsSourceCstr, NULL));
 		GLCall(glCompileShader(vs));
 
 		// Check compilation
@@ -25,8 +30,10 @@ ShaderPipeline::ShaderPipeline(const char* vsSource, const char* fsSource) {
 	// ------------------ Fragment shader
 	unsigned int fs;
 	{
+		std::string fsSource = readFile(fragmentFilepath);
+		const char* fsSourceCstr = fsSource.c_str();
 		fs = glCreateShader(GL_FRAGMENT_SHADER);
-		GLCall(glShaderSource(fs, 1, &fsSource, NULL));
+		GLCall(glShaderSource(fs, 1, &fsSourceCstr, NULL));
 		GLCall(glCompileShader(fs));
 
 		// Check compilation
@@ -84,4 +91,22 @@ int ShaderPipeline::getUniformLocation(const std::string& name) {
 	}
 	m_uniformLocationCache[name] = location;
 	return location;
+}
+
+std::string ShaderPipeline::readFile(const std::string& filepath) {
+	// Open file
+	std::ifstream stream(filepath);
+	if (!stream.is_open()) {
+		spdlog::warn("Failed to open file : |{}|", filepath);
+		return "";
+	}
+
+	// Read line by line and put it in a string
+	std::string str = "";
+	std::string tempLine = "";
+	while (getline(stream, tempLine)) {
+		str += tempLine + '\n';
+	}
+	stream.close();
+	return str;
 }

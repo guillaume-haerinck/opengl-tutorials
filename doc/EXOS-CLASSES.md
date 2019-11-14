@@ -280,8 +280,41 @@ int main(int argc, char *argv[]) {
 }
 ```
 
-PS : make sure you pass your strings as const references ! ("const std::string&" instead of "std::string")
-
 </details>
 
 </details>
+
+### 🧐 Improving the code : read shaders from a file instead of writting it as a string in the .cpp
+
+#### 🤔 The problem
+
+It's **** illisible, you have no syntax highlight, nothing :/ + the code cannot be reused for several shaders.
+
+#### 👌 The solution
+
+We will use the functions of the standard library to read from a file and exctract a string :
+
+```C++
+std::string ShaderPipeline::readFile(const std::string& filepath) {
+	// Open file
+	std::ifstream stream(filepath);
+	if (!stream.is_open()) {
+		spdlog::warn("Failed to open file : |{}|", filepath);
+		return "";
+	}
+
+	// Read line by line and put it in a string
+	std::string str = "";
+	std::string tempLine = "";
+	while (getline(stream, tempLine)) {
+		str += tempLine + '\n';
+	}
+	stream.close();
+
+	return str;
+}
+```
+
+Add this in your .cpp, and add the declaration to the .hpp.
+And now, let's change the constructor to take the filepath to the vertex and fragment shader instead of the source code directly.
+Once you're done, create the corresponding files in the res folder and try to run your main (after changing the arguments in the pipeline's constructor) : it should work just as before, but the code is so much cleaner :heart: Well done !

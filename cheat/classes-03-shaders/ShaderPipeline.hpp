@@ -8,7 +8,7 @@
 
 class ShaderPipeline {
 public:
-	ShaderPipeline(const char* vsSource, const char* fsSource);
+	ShaderPipeline(const std::string& vertexFilepath, const std::string& fragmentFilepath);
 	~ShaderPipeline();
 
 	void bind();
@@ -16,6 +16,7 @@ public:
 
 private:
 	int getUniformLocation(const std::string& name);
+	std::string readFile(const std::string& filepath);
 
 private:
 	GLuint m_pipelineID;
