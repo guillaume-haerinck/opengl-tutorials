@@ -8,8 +8,8 @@ In order to do so without too much pain, we first need to put all that code into
 
 + [ShaderPipeline class](#01---shaderpipeline-class)
 + [ShaderPipeline improvements !](#02---shaderpipeline-improvements)
-+ [Debug buffer data](#03---buffers-everywhere)
-+ [Uniforms handling](#04---uniforms-in-shape)
++ [CubeMesh class](#03---cube-mesh)
++ [CubeMesh improvements !](#04---cubemesh-improvements)
 + [Everything together](#05---cube-mesh-and-the-universe)
 
 ___
@@ -61,3 +61,15 @@ std::string ShaderPipeline::readFile(const std::string& filepath) {
 This function has been added to the class, now you have to change the constructor to take the filepath to the vertex and fragment shader instead of the source code directly.
 
 Once you're done, change the construction of the pipeline in your main to use to shader files that are in the "res" folder and try to run it ! it should work just as before, but the code is so much cleaner :heart: Well done !
+
+
+## 03 - CubeMesh
+
+> Send the buffers to the GPU, and draw in one line !
+
+Just as before, you've got an empty CubeMesh class to fill with code you'll find in your main ;)
+
+## 04 - CubeMesh improvements
+
+> Lots of cubes in one draw call !
+

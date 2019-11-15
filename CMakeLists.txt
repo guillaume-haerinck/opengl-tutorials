@@ -9,7 +9,7 @@ project(opengl-tutorials C CXX)
 file(GLOB_RECURSE MY_COMMON src/common/*)
 
 ################################ -------- ######
-file(GLOB_RECURSE MY_SOURCES cheat/classes-03/*) # <--------------------------------- !! UPDATE ME !!
+file(GLOB_RECURSE MY_SOURCES src/classes-03/*) # <--------------------------------- !! UPDATE ME !!
 ################################ -------- ######
 
 # /////////////////////////////////////////////////////////////////////////////
