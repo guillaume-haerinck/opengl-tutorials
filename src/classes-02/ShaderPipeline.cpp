@@ -6,16 +6,14 @@
 #include <fstream>
 #include <iostream>
 
-ShaderPipeline::ShaderPipeline(const std::string& vertexFilepath, const std::string& fragmentFilepath) {
+ShaderPipeline::ShaderPipeline(const char* vsSource, const char* fsSource) {
 	// ------------------ Vertex shader
 	unsigned int vs;
 	int success;
 	char infoLog[512];
 	{
-		std::string vsSource = readFile(vertexFilepath);
-		const char* vsSourceCstr = vsSource.c_str();
 		vs = glCreateShader(GL_VERTEX_SHADER);
-		GLCall(glShaderSource(vs, 1, &vsSourceCstr, NULL));
+		GLCall(glShaderSource(vs, 1, &vsSource, NULL));
 		GLCall(glCompileShader(vs));
 
 		// Check compilation
@@ -30,10 +28,8 @@ ShaderPipeline::ShaderPipeline(const std::string& vertexFilepath, const std::str
 	// ------------------ Fragment shader
 	unsigned int fs;
 	{
-		std::string fsSource = readFile(fragmentFilepath);
-		const char* fsSourceCstr = fsSource.c_str();
 		fs = glCreateShader(GL_FRAGMENT_SHADER);
-		GLCall(glShaderSource(fs, 1, &fsSourceCstr, NULL));
+		GLCall(glShaderSource(fs, 1, &fsSource, NULL));
 		GLCall(glCompileShader(fs));
 
 		// Check compilation

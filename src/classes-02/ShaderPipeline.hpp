@@ -8,7 +8,7 @@
 
 class ShaderPipeline {
 public:
-	ShaderPipeline(const std::string& vertexFilepath, const std::string& fragmentFilepath);
+	ShaderPipeline(const char* vsSource, const char* fsSource);
 	~ShaderPipeline();
 
 	void bind();
