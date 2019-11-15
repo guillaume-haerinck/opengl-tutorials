@@ -4,114 +4,58 @@
 #include <debug_break/debug_break.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <string>
 
 #include "common/app.h"
 #include "common/gl-exception.h"
+#include "common/square-data.h"
 
-#include "imgui.h"
-
-#include "cube-vao.hpp"
+#include "ShaderPipeline.hpp"
 
 int main(int argc, char *argv[]) {
     App app;
 
     glClearColor(1, 0, 1, 1);
 
-	CubeVAO cubeVAO;
-
-    // ------------------ Vertex shader
-    unsigned int vs;
-    int success;
-    char infoLog[512];
+    // ------------------ Vertex Buffer 1
+    unsigned int posVB;
     {
-        const char* vsSource = R"(#version 330 core
-            layout (location = 0) in vec3 aPos;
-            layout (location = 1) in vec3 aNormal;
-			out vec3 vLocalPos;
-			out vec3 vNormal;
-			uniform mat4 uProj;
+        GLCall(glGenBuffers(1, &posVB));
+        GLCall(glBindBuffer(GL_ARRAY_BUFFER, posVB));
+        GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(squareData::positions), squareData::positions, GL_STATIC_DRAW));
+        GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+    }
+    
+    // ------------------ Vertex Array
+    unsigned int vao;
+    {
+        GLCall(glGenVertexArrays(1, &vao));
+        GLCall(glBindVertexArray(vao));
 
-            void main() {
-                gl_Position = uProj * vec4(aPos+vec3(0.,0.,-2.0), 1.0) ;
-				vLocalPos = aPos;
-				vNormal = aNormal;
-            }
-        )";
+        // Vertex input description
+        {
+            GLCall(glEnableVertexAttribArray(0));
+            GLCall(glBindBuffer(GL_ARRAY_BUFFER, posVB));
+            GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL));
+        }
         
-        vs = glCreateShader(GL_VERTEX_SHADER);
-        GLCall(glShaderSource(vs, 1, &vsSource, NULL));
-        GLCall(glCompileShader(vs));
-
-        // Check compilation
-        GLCall(glGetShaderiv(vs, GL_COMPILE_STATUS, &success));
-        if (!success) {
-            GLCall(glGetShaderInfoLog(vs, 512, NULL, infoLog));
-            spdlog::critical("[VertexShader] Compilation failed : {}", infoLog);
-            debug_break();
-        }
+        GLCall(glBindVertexArray(0));
     }
 
-    // ------------------ Fragment shader
-    unsigned int fs;
+    // ------------------ Index buffer
+    unsigned int ib;
     {
-		const char* fsSource = R"(#version 330 core
-            out vec4 FragColor;
-			in vec3 vLocalPos;
-			in vec3 vNormal;
-
-            void main() {
-                FragColor = vec4(vLocalPos+vec3(0.5),1.0f);
-				float t = abs(dot( vNormal, normalize(vec3(0.3,-0.2,0.8))));
-				FragColor *= t;
-            } 
-        )";
-        
-        fs = glCreateShader(GL_FRAGMENT_SHADER);
-        GLCall(glShaderSource(fs, 1, &fsSource, NULL));
-        GLCall(glCompileShader(fs));
-
-        // Check compilation
-        int success;
-        GLCall(glGetShaderiv(fs, GL_COMPILE_STATUS, &success));
-        if (!success) {
-            GLCall(glGetShaderInfoLog(fs, 512, NULL, infoLog));
-            spdlog::critical("[FragmentShader] Compilation failed : {}", infoLog);
-            debug_break();
-        }
+        GLCall(glGenBuffers(1, &ib));
+        GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib));
+        GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(squareData::indices), squareData::indices, GL_STATIC_DRAW));
+        GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
     }
 
-    // ------------------ Pipeline
-    unsigned int pipeline;
-    {
-        pipeline = glCreateProgram();
-        GLCall(glAttachShader(pipeline, vs));
-        GLCall(glAttachShader(pipeline, fs));
-        GLCall(glLinkProgram(pipeline));
+	// ------------------ Shader pipeline
 
-        // Check compilation
-        GLCall(glGetProgramiv(pipeline, GL_LINK_STATUS, &success));
-        if (!success) {
-            GLCall(glGetProgramInfoLog(pipeline, 512, NULL, infoLog));
-            spdlog::critical("[Pipeline] Link failed : {}", infoLog);
-            debug_break();
-        }
+	ShaderPipeline shaderPipeline("res/shader.vert", "res/shader.frag");
 
-        // Delete useless data
-        GLCall(glDeleteShader(vs));
-        GLCall(glDeleteShader(fs));
-    }
-
-	// ------------------ Uniforms
-	int projMatUniform;
-	float fov = 1.0f;
-	glm::mat4 projMat;
-
-	GLCall(glUseProgram(pipeline));
-	{
-
-		projMatUniform = glGetUniformLocation(pipeline, "uProj");
-	}
-
+    float counter = 0.0f;
     while (app.isRunning()) {
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
@@ -122,19 +66,30 @@ int main(int argc, char *argv[]) {
             };
         }
 
+        counter += 0.05f;
+        if (counter > 100) {
+            counter = 0;
+        }
+
         app.beginFrame();
 
-		// ImGUI
-
-		ImGui::Begin("Camera");
-		ImGui::SliderFloat("FOV", &fov, 0.0f, 3.0f);
-		ImGui::End();
+        // Update uniforms
+		shaderPipeline.bind();
+        {
+            glm::mat4x4 modelMat = glm::rotate(glm::mat4(1.0f), counter, glm::vec3(0, 1, 0));
+			shaderPipeline.setUniformMat4f("uModel", modelMat);
+        }
+        {
+            glm::mat4x4 viewMat = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -10.0f));
+            glm::mat4x4 projMat = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
+            glm::mat4x4 viewProjMat = projMat * viewMat;
+			shaderPipeline.setUniformMat4f("uViewProj", viewProjMat);
+        }
 
         // Draw call
-		projMat = glm::perspective(fov, 1.0f, 0.1f, 10.0f);
-		GLCall(glUniformMatrix4fv(projMatUniform, 1, GL_FALSE, &projMat[0][0]));
-
-		cubeVAO.draw();
+        GLCall(glBindVertexArray(vao));
+        GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib));
+        GLCall(glDrawElements(GL_TRIANGLES, std::size(squareData::indices), GL_UNSIGNED_SHORT, (void*) 0));
 
         app.endFrame();
     }
