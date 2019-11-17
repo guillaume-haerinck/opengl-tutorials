@@ -1,6 +1,8 @@
+![OpenGL](doc/img/opengl-logo.jpg)
+
 # OpenGL Tutorials
 
-Tutorials made by IMAC students to learn OpenGL.
+Tutorials made by IMAC students to learn, debug and use efficiently OpenGL.
 
 ## Table of Contents
 
@@ -52,11 +54,15 @@ If you are on windows, open the project with visual studio.
 
 #### `Option 2: Visual Studio (Windows only)`
 
-Open this folder with the `CMake...` option in file->open on Visual Studio, and run the project.
+Open this folder with the `CMake...` option in file->open on Visual Studio, and run the project. Be sure to run the `CMakeLists.txt` project from the drop-down.
+
+![Visual studio](doc/img/visual-studio-run.png)
 
 #### `Option 3: VSCode`
 
 Use the `CMakeTools` plugin, build with `f7` then run with `f5` (But be carefull to be on the right platform, there is a launch file for windows and for linux).
+
+![VS Code](doc/img/vscode-run.png)
 
 ## Tutorials
 
