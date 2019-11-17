@@ -41,7 +41,9 @@ You can handle the `CMakeLists.txt` in any way you like, here's some way to use 
 #### `Option 1: CLI`
 
 ```bash
-cmake . -DCMAKE_BUILD_TYPE=Release
+mkdir build
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=Debug
 make
 ```
 
