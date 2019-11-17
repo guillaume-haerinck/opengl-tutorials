@@ -2,6 +2,7 @@
 #include <glad/glad.h>
 
 #include "common/app.h"
+#include "common/gl-exception.h"
 
 int main(int argc, char *argv[]) {
     App app;
@@ -18,7 +19,7 @@ int main(int argc, char *argv[]) {
         };
         
         glGenBuffers(1, &vbo);
-        glBindBuffer(GL_FRAMEBUFFER, vbo);
+        GLCall(glBindBuffer(GL_FRAMEBUFFER, vbo));
         glBufferData(GL_FRAMEBUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
         glBindBuffer(GL_FRAMEBUFFER, 0);
     }

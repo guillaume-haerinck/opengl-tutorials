@@ -44,8 +44,11 @@ You can handle the `CMakeLists.txt` in any way you like, here's some way to use 
 mkdir build
 cd build
 cmake .. -DCMAKE_BUILD_TYPE=Debug
-make
 ```
+
+If you are on linux, you can then run `make` and lauch the executable with `./opengl-tutorial`.
+
+If you are on windows, open the project with visual studio.
 
 #### `Option 2: Visual Studio (Windows only)`
 
