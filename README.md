@@ -48,7 +48,7 @@ cd build
 cmake .. -DCMAKE_BUILD_TYPE=Debug
 ```
 
-If you are on linux, you can then run `make` and lauch the executable with `./opengl-tutorial`.
+If you are on linux, you can then run `make` and launch the executable with `./build/bin/Debug/opengl-tutorial`.
 
 If you are on windows, open the project with visual studio.
 
