@@ -79,6 +79,8 @@ Then, our position will be accessible in the shader just as any other attribute 
 
 In the CubeMesh.cpp file we've added a "GLuint m_vbTranslations" attribute that is the OpenGl ID for our new buffer. 
 
+#### Buffer creation 👌
+
 So first, you must create the buffer on the GPU.
 
 <details><summary>Solution</summary>
@@ -86,6 +88,8 @@ Simply add this in the constructor of CubeMesh :
 '''C++
 GLCall(glGenBuffers(1, &m_vbTranslations));
 '''
+
+#### Layout description 👌
 
 </details>
 
@@ -105,11 +109,13 @@ GLCall(glVertexAttribDivisor(1, 1));
 
 </details>
 
+#### Shader modifications 👌
+
 Now you can go in your shader, add the corresponding attribute, and use it in the computation of "gl_Position" !
 
 <details><summary>Solution</summary>
 
-'''glsl
+'''C++
 #version 330 core
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 aTranslation;
@@ -123,9 +129,11 @@ void main() {
 '''
 </details>
 
+#### Actually add cubes 👌
+
 Now we are almost ready to draw lot's of cubes ! But where ? How many ? It's time to fill the "addCube" function ! :
 
-We need to keep the list on the GPU ("std::vector<glm::vec3> m_translations" is here for that purpose), and also dont forget to send the data to the GPU ! (we should resend it each time a cube is added to our list)
+We need to keep the list on the GPU ("std::vector<glm::vec3> m_translations" is here for that purpose, we will push all the positions into it), and also dont forget to send the data to the GPU ! (we should resend it each time a cube is added to our list)
 
 <details><summary>Solution</summary>
 
@@ -149,6 +157,8 @@ cube.addCube(glm::vec3(0., 0., 1.));
 cube.addCube(glm::vec3(4., 0., 1.));
 cube.addCube(glm::vec3(-4., 0., 1.));
 '''
+
+#### Draw call 👌
 
 Finally, the draw call will also be slightly different : it's now "glDrawElementsInstanced" instead of "glDrawElements". The parameters are slightly different too, and I suggest you take a look at the documentation to find out :wink:
 If you don't find, here's the answer : 
