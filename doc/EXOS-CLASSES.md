@@ -73,13 +73,13 @@ Just as before, you've got an empty CubeMesh class to fill with code you'll find
 
 > Lots of cubes in one draw call !
 
-To reuse our cube and tell OpenGL to draw it in many different places, we're gonna use something called "instancing".
+To reuse our cube and tell OpenGL to draw it in many different places, we're gonna use something called **instancing**.
 The idea is very straight forward : we create a buffer containing all the positions where we want a cube to be drawn, send it to the GPU and tell OpenGL what this buffer is (a.k.a. vertexAttribPointer).
 Then, our position will be accessible in the shader just as any other attribute !
 
-In the CubeMesh.cpp file we've added a "GLuint m_vbTranslations" attribute that is the OpenGl ID for our new buffer. 
+In the CubeMesh.cpp file we've added a **GLuint m_vbTranslations** attribute that is the OpenGl ID for our new buffer. 
 
-#### Buffer creation 👌
+#### 👌 Buffer creation
 
 So first, you must create the buffer on the GPU.
 
@@ -89,7 +89,7 @@ Simply add this in the constructor of CubeMesh :
 GLCall(glGenBuffers(1, &m_vbTranslations));
 '''
 
-#### Layout description 👌
+#### 👌 Layout description
 
 </details>
 
@@ -109,9 +109,9 @@ GLCall(glVertexAttribDivisor(1, 1));
 
 </details>
 
-#### Shader modifications 👌
+#### 👌 Shader modification
 
-Now you can go in your shader, add the corresponding attribute, and use it in the computation of "gl_Position" !
+Now you can go in your shader, add the corresponding attribute, and use it in the computation of **gl_Position** !
 
 <details><summary>Solution</summary>
 
@@ -129,11 +129,11 @@ void main() {
 '''
 </details>
 
-#### Actually add cubes 👌
+#### 👌 Actually add cubes
 
-Now we are almost ready to draw lot's of cubes ! But where ? How many ? It's time to fill the "addCube" function ! :
+Now we are almost ready to draw lot's of cubes ! But where ? How many ? It's time to fill the *addCube* function ! :
 
-We need to keep the list on the GPU ("std::vector<glm::vec3> m_translations" is here for that purpose, we will push all the positions into it), and also dont forget to send the data to the GPU ! (we should resend it each time a cube is added to our list)
+We need to keep the list on the GPU (**std::vector<glm::vec3> m_translations** is here for that purpose, we will push all the positions into it), and also dont forget to send the data to the GPU ! (we should resend it each time a cube is added to our list)
 
 <details><summary>Solution</summary>
 
@@ -149,7 +149,7 @@ void CubeMesh::addCube(const glm::vec3& translation) {
 
 </details>
 
-And of course we must use it in the "main" to add a few cubes :
+And of course we must use it in the *main* to add a few cubes :
 
 '''C++
 CubeMesh cube;
@@ -158,9 +158,9 @@ cube.addCube(glm::vec3(4., 0., 1.));
 cube.addCube(glm::vec3(-4., 0., 1.));
 '''
 
-#### Draw call 👌
+#### 👌 Draw call 
 
-Finally, the draw call will also be slightly different : it's now "glDrawElementsInstanced" instead of "glDrawElements". The parameters are slightly different too, and I suggest you take a look at the documentation to find out :wink:
+Finally, the draw call will also be slightly different : it's now **glDrawElementsInstanced** instead of **glDrawElements**. The parameters are slightly different too, and I suggest you take a look at the documentation to find out :wink:
 If you don't find, here's the answer : 
 
 <details><summary>Solution</summary>
