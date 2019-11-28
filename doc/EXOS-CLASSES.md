@@ -85,6 +85,7 @@ So first, you must create the buffer on the GPU.
 
 <details><summary>Solution</summary>
 Simply add this in the constructor of CubeMesh :
+
 ```C++
 GLCall(glGenBuffers(1, &m_vbTranslations));
 ```
