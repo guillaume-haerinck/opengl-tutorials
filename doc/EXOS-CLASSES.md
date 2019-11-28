@@ -84,15 +84,17 @@ In the CubeMesh.cpp file we've added a **GLuint m_vbTranslations** attribute tha
 So first, you must create the buffer on the GPU.
 
 <details><summary>Solution</summary>
+
 Simply add this in the constructor of CubeMesh :
 
 ```C++
 GLCall(glGenBuffers(1, &m_vbTranslations));
 ```
 
+</details>
+
 #### 👌 Layout description
 
-</details>
 
 Then, specify the layout : the vertexAttribPointer as usual, plus one line :
 ```C++
