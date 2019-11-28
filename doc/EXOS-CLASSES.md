@@ -10,7 +10,6 @@ In order to do so without too much pain, we first need to put all that code into
 + [ShaderPipeline improvements !](#02---shaderpipeline-improvements)
 + [CubeMesh class](#03---cube-mesh)
 + [CubeMesh improvements !](#04---cubemesh-improvements)
-+ [Everything together](#05---cube-mesh-and-the-universe)
 
 ___
 
