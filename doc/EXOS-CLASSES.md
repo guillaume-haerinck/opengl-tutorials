@@ -77,10 +77,10 @@ To reuse our cube and tell OpenGL to draw it in many different places, we're gon
 The idea is very straight forward : we create a buffer containing all the positions where we want a cube to be drawn, send it to the GPU and tell OpenGL what this buffer is (a.k.a. vertexAttribPointer).
 Then, our position will be accessible in the shader just as any other attribute !
 
-In the CubeMesh.cpp file we've added a **GLuint m_vbTranslations** attribute that is the OpenGl ID for our new buffer. 
 
 #### 👌 Buffer creation
 
+In the CubeMesh.cpp file we've added a **GLuint m_vbTranslations** attribute that is the OpenGl ID for our new buffer. 
 So first, you must create the buffer on the GPU.
 
 <details><summary>Solution</summary>
@@ -103,6 +103,7 @@ glVertexAttribDivisor([put_your_attribute_location_here], 1);
 This is to tell OpenGL that we're sending an instanced buffer and that the attribute should stay the same for all the vertices of each instance (instead of changing for each vertex, which is the defaut behaviour).
 
 <details><summary>Solution</summary>
+
 ```C++
 GLCall(glEnableVertexAttribArray(1));
 GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vbTranslations));
