@@ -35,7 +35,7 @@ It's **** illisible, you have no syntax highlight, nothing :weary: and the code 
 
 #### 👌 The solution
 
-We will use the functions of the standard library to read from a file and exctract a string :
+We will use the functions of the standard library to read from a file and extract a string :
 
 ```C++
 std::string ShaderPipeline::readFile(const std::string& filepath) {
@@ -60,7 +60,7 @@ std::string ShaderPipeline::readFile(const std::string& filepath) {
 
 This function has been added to the class, now you have to change the constructor to take the filepath to the vertex and fragment shader instead of the source code directly.
 
-Once you're done, change the construction of the pipeline in your main to use to shader files that are in the "res" folder and try to run it ! it should work just as before, but the code is so much cleaner :heart: Well done !
+Once you're done, change the construction of the pipeline in your main to use the shader files that are in the "res" folder and try to run it ! it should work just as before, but the code is so much cleaner :heart: Well done !
 
 
 ## 03 - CubeMesh
