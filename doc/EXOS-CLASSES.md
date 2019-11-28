@@ -103,7 +103,7 @@ Then, specify the layout : the vertexAttribPointer as usual, plus one line :
 ```C++
 glVertexAttribDivisor([put_your_attribute_location_here], 1);
 ```
-This is to tell OpenGL that we're sending an instanced buffer and that the corresponding attribute should stay the same for all the vertices of each instance (instead of changing for each vertex, which is the defaut behaviour).
+This is to tell OpenGL that we're sending an instanced buffer and that the corresponding attribute should stay the same for all the vertices of each instance (instead of changing for each vertex, which is the default behaviour).
 
 <details><summary>Solution</summary>
 
@@ -116,7 +116,7 @@ GLCall(glVertexAttribDivisor(1, 1));
 
 </details>
 
-#### 👌 Shader modification
+#### 👌 Shader modifications
 
 Now you can go in your shader, add the corresponding attribute, and use it in the computation of **gl_Position** !
 
@@ -136,11 +136,11 @@ void main() {
 ```
 </details>
 
-#### 👌 Actually add cubes
+#### 👌 Actually adding cubes
 
 Now we are almost ready to draw lot's of cubes ! But where ? How many ? It's time to fill the *addCube* function ! :
 
-We need to keep the list on the GPU (**std::vector<glm::vec3> m_translations** is here for that purpose, we will push all the positions into it), and also dont forget to send the data to the GPU ! (we should resend it each time a cube is added to our list)
+We need to keep the list on the CPU (**std::vector\<glm::vec3\> m_translations** is here for that purpose, we will push all the positions into it), and also dont forget to send the data to the GPU ! (we should resend it each time a cube is added to our list)
 
 <details><summary>Solution</summary>
 
