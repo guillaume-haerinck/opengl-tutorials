@@ -185,3 +185,7 @@ glDrawElementsInstanced(GL_TRIANGLES, std::size(squareData::indices), GL_UNSIGNE
 Everything should be working now !
 
 (if it doesn't, use what you learned in the **Debugging** section to fix it :stuck_out_tongue:)
+
+<p align="center">
+<img src="img/lotsOfCubes.png" height="300px" alt="Final result">
+</p>
