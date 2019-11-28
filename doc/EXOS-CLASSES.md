@@ -121,7 +121,6 @@ void main() {
     gl_Position = uViewProj * uModel * vec4(aPos + aTranslation, 1.0);
 }
 '''
-N.B. : it might not be the smartest way of using "aTranslation" to compute "gl_Position", we will come back to it later :wink:
 </details>
 
 Now we are almost ready to draw lot's of cubes ! But where ? How many ? It's time to fill the "addCube" function ! :
@@ -141,6 +140,15 @@ void CubeMesh::addCube(const glm::vec3& translation) {
 '''
 
 </details>
+
+And of course we must use it in the "main" to add a few cubes :
+
+'''C++
+CubeMesh cube;
+cube.addCube(glm::vec3(0., 0., 1.));
+cube.addCube(glm::vec3(4., 0., 1.));
+cube.addCube(glm::vec3(-4., 0., 1.));
+'''
 
 Finally, the draw call will also be slightly different : it's now "glDrawElementsInstanced" instead of "glDrawElements". The parameters are slightly different too, and I suggest you take a look at the documentation to find out :wink:
 If you don't find, here's the answer : 
