@@ -21,13 +21,12 @@ int main(int argc, char *argv[]) {
 	// ------------------ Cube mesh
 
 	CubeMesh cube;
-	cube.addCube(glm::vec3(0., 0., 1.));
-	cube.addCube(glm::vec3(4., 0., 1.));
-	cube.addCube(glm::vec3(-4., 0., 1.));
 
 	// ------------------ Shader pipeline
 
-	ShaderPipeline shaderPipeline("res/cheat-classes04.vert", "res/shader.frag");
+	ShaderPipeline shaderPipeline("res/shader.vert", "res/shader.frag");
+
+	// ------------------ Loop :
 
     float counter = 0.0f;
     while (app.isRunning()) {
@@ -35,12 +34,6 @@ int main(int argc, char *argv[]) {
         while (SDL_PollEvent(&e)) {
             switch (e.type) {
             case SDL_QUIT: app.exit();
-				break;
-			case SDL_MOUSEBUTTONDOWN:
-				int x, y;
-				SDL_GetMouseState(&x, &y);
-				cube.addCube(glm::vec3((x / 325.0f -1.0f) * 6.0f, -(y / 325.0f -1.0f) * 6.0f, 1.0f));
-				break;
 
             default: break;
             };

@@ -73,3 +73,4 @@ Just as before, you've got an empty CubeMesh class to fill with code you'll find
 
 > Lots of cubes in one draw call !
 
+dont forget the shader
